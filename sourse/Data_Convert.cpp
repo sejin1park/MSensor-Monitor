@@ -10,7 +10,7 @@
  */
 
 double Data_Convert::Gyro_Convert(double data){
-    return data = (data * 1.0) / (65536 / 500);
+    return data = (data * 1.0) / (65536 / 4000);
 }
 /*********************************************************************
  * @fn      Accel_Convert

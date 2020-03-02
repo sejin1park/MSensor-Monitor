@@ -203,15 +203,16 @@ QString Error_Interpret(int8_t error_code){
     switch(error_code){
         case 1:
         return "현재 상태에서 해당 CMD 수행 불가";
-        break;
+
     case 2:
         return "등록되지 않은 CMD";
-        break;
+
     case 3:
         return "모듈에 등록되지 않은 타입";
-        break;
+
     case 4:
         return "측정 타입이 지정되지 않았습니다.";
-        break;
+   default:
+         return "잘못된 에러 코드입니다.";
     }
 }

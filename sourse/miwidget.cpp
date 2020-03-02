@@ -151,7 +151,8 @@ void miWidget::paintGL()
     // Calculate model view transformation
     QMatrix4x4 matrix;
     matrix.translate(0.0, 0.0, -5.0);
-    matrix.lookAt(QVector3D(-0.6,1,0),QVector3D(0, 0, 0),QVector3D(0, 0, 1));
+    matrix.lookAt(QVector3D(-0.7f,1,0),QVector3D(0, 0, 0),QVector3D(0, 0, 1)); // 화면과 실제 모습과 맞추기 위해서 카메라를 돌림.
+    // 현재 센서를 가만히 뒀을때, -z방향으로 약 30~40도 가량 돌아간 상태로 센서값이 출력됨.
     matrix.rotate(rotation);
 
 
