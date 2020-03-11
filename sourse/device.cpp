@@ -483,7 +483,6 @@ void Device::serviceDetailsDiscovered(QLowEnergyService::ServiceState newState)
             m_notificationDesc = Recive_character.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
             if(m_notificationDesc.isValid()){
                 service->writeDescriptor(m_notificationDesc,QByteArray::fromHex("0100")); // notification Activation
-
             }
             connect(Terminal_Service, SIGNAL(characteristicChanged(QLowEnergyCharacteristic,QByteArray)),
                     this, SLOT(ReceiveValue(QLowEnergyCharacteristic,QByteArray)));
