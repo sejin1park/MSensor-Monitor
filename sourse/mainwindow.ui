@@ -32,7 +32,7 @@
    <string>Msensor Monitor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resoure/Resources.qrc">
+   <iconset>
     <normaloff>:/new/prefix1/logo.png</normaloff>:/new/prefix1/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -526,7 +526,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../resoure/Resources.qrc">:/new/prefix1/Mtome_logo.png</pixmap>
+     <pixmap>:/new/prefix1/Mtome_logo.png</pixmap>
     </property>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -660,18 +660,16 @@
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header location="global">header/qcustomplot.h</header>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>miWidget</class>
    <extends>QWidget</extends>
-   <header>header/miwidget.h</header>
+   <header>miwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resoure/Resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

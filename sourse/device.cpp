@@ -72,10 +72,10 @@ void Device::startDeviceDiscovery()
     devices.clear();
     emit devicesUpdated();
 
-    setDebug("Scanning for devices ...");
-    emit ProgressBar_update_SIG("Scanning for devices ...");
-    discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
-    error_code = BLE_OFF;
+    //setDebug("Scanning for devices ...");
+    //emit ProgressBar_update_SIG("Scanning for devices ...");
+    //discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+    //error_code = BLE_OFF;
 
     if (discoveryAgent->isActive()) {
 
@@ -83,6 +83,10 @@ void Device::startDeviceDiscovery()
         Q_EMIT stateChanged();
     }
 
+}
+void Device::get_devices( QList<QObject *> list)
+{
+    devices = list;
 }
 /*********************************************************************
  * @fn      addDevice
@@ -105,13 +109,13 @@ void Device::addDevice(const QBluetoothDeviceInfo &info)
         //Device name check
         if(d->getName().contains("MSensor",Qt::CaseInsensitive))
         {
-            Device::scanServices(d->getAddress());
+           // Device::scanServices(d->getAddress());
         }
         else
         {
-            error_code = WRONG_DEVICE;
+            //error_code = WRONG_DEVICE;
         }
-        if(device_count>=2) error_code = MULTIPLE_DEVICE_CONNECT;
+       // if(device_count>=2) error_code = MULTIPLE_DEVICE_CONNECT;
     }
 }
 
@@ -138,7 +142,7 @@ void Device::deviceScanFinished()
         emit ProgressBar_update_SIG("Finish");
         break;
     case BLE_OFF:
-        emit ProgressBar_update_SIG(QString("Connecting Fail(Code : %1)").arg(BLE_OFF));
+       // emit ProgressBar_update_SIG(QString("Connecting Fail(Code : %1)").arg(BLE_OFF));
         break;
     case DEVICE_POWER_OFF:
         emit ProgressBar_update_SIG(QString("Connecting Fail(Code : %1)").arg(DEVICE_POWER_OFF));
@@ -150,6 +154,7 @@ void Device::deviceScanFinished()
         emit ProgressBar_update_SIG(QString("Connecting Fail(Code : %1)").arg(MULTIPLE_DEVICE_CONNECT));
         break;
     }
+    qDebug()<<"aaaaaa";
     error_code =SUCCESS;
     device_count = 0;
 }
@@ -210,6 +215,7 @@ QVariant Device::getCharacteristics()
 void Device::scanServices(const QString &address)
 {
     // We need the current device for service discovery.
+      discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 
     for (auto d: qAsConst(devices)) {
         auto device = qobject_cast<DeviceInfo *>(d);
@@ -240,6 +246,7 @@ void Device::scanServices(const QString &address)
         controller->disconnectFromDevice();
         delete controller;
         controller = nullptr;
+
     }
 
     //! [les-controller-1]
@@ -276,7 +283,10 @@ void Device::scanServices(const QString &address)
 void Device::addLowEnergyService(const QBluetoothUuid &serviceUuid)
 {
     //! [les-service-1]
+    //!
+    qDebug()<<"6";
     QLowEnergyService *service = controller->createServiceObject(serviceUuid);
+
     if (!service) {
         qWarning() << "Cannot create service for uuid";
         return;
@@ -285,6 +295,7 @@ void Device::addLowEnergyService(const QBluetoothUuid &serviceUuid)
     auto serv = new ServiceInfo(service);
     m_services.append(serv);
 
+      qDebug()<<serv->getName();
 
     emit servicesUpdated();
 }
@@ -302,6 +313,10 @@ void Device::addLowEnergyService(const QBluetoothUuid &serviceUuid)
 void Device::serviceScanDone()
 {
     if (m_services.isEmpty())emit servicesUpdated();
+
+    Device::connectToService("f000aa70-0451-4000-b000-000000000000"); // terminal service
+    Device::connectToService("f000aa80-0451-4000-b000-000000000000"); // data service
+    Device::connectToService("0x180a"); //Device info service
 }
 
 /*********************************************************************
@@ -316,12 +331,14 @@ void Device::serviceScanDone()
 
 void Device::connectToService(const QString &uuid)
 {
+    qDebug()<<"Scdda";
     QLowEnergyService *service = nullptr;
     for (auto s: qAsConst(m_services)) {
         auto serviceInfo = qobject_cast<ServiceInfo *>(s);
         if (!serviceInfo)
             continue;
-
+        qDebug()<<serviceInfo->getUuid();
+        qDebug()<<uuid;
         if (serviceInfo->getUuid() == uuid) {
             service = serviceInfo->service();
             if(uuid.contains("f000aa70",Qt::CaseInsensitive)){
@@ -345,7 +362,7 @@ void Device::connectToService(const QString &uuid)
     qDeleteAll(m_characteristics);
     m_characteristics.clear();
     emit characteristicsUpdated();
-
+    qDebug()<<service->state();
     if (service->state() == QLowEnergyService::DiscoveryRequired) {
         //! [les-service-3]
         connect(service, &QLowEnergyService::stateChanged,
@@ -376,10 +393,8 @@ void Device::deviceConnected()
     //! [les-service-2]
     controller->discoverServices();
     //! [les-service-2]
+    qDebug()<<"Bbbb";
 
-    Device::connectToService("f000aa70-0451-4000-b000-000000000000"); // terminal service
-    Device::connectToService("f000aa80-0451-4000-b000-000000000000"); // data service
-    Device::connectToService("0x180a"); //Device info service
 }
 
 /*********************************************************************
@@ -444,6 +459,9 @@ void Device::deviceDisconnected()
  */
 void Device::serviceDetailsDiscovered(QLowEnergyService::ServiceState newState)
 {
+
+    qDebug()<<"10";
+    qDebug()<<newState;
 
     if (newState != QLowEnergyService::ServiceDiscovered) {
 

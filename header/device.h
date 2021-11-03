@@ -112,7 +112,7 @@ public:
     int get_measure_method();
     bool state();
     bool hasControllerError() const;
-
+    void get_devices( QList<QObject *> list);
     bool isRandomAddress() const;
     void setRandomAddress(bool newValue);
 signals:

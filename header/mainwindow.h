@@ -6,7 +6,7 @@
 #include "header/device.h"
 #include "header/dialog.h"
 #include "dialog2.h"
-
+#include "m_connect.h"
 
 #define LIST_COUNT_LIMIT 15 // List_Widget2 count limit
 #define FILENAME "Data_Log" // Save_file name
@@ -30,7 +30,7 @@ private slots:
     void Message_Receive_SLOT(QString recive_data, int cmd);
     void Message_Send_SLOT(QString send_data,int cmd);
     void Dialog_Close_SLOT();
-
+    void receive_temp(QString temp,QList<QObject *> List);
     void on_Connecting_Button_clicked();
 
     void on_Raw_Data_Button_clicked();
@@ -64,7 +64,7 @@ private:
      //Push Button Click
     Device *device_helper = new Device();
     My_messagebox *my_messagebox;
-    Dialog *my_Dialog ;
+    M_connect *my_Dialog ;
     Dialog2 *my_Dialog2 ;
     QFile *file = new QFile;
     int data_log_counter = 0;

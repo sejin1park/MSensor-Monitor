@@ -34,14 +34,20 @@ MainWindow::~MainWindow()
     delete device_helper;
 }
 
+void MainWindow::receive_temp(QString temp,QList<QObject *> List){
 
+     device_helper->get_devices(List);
+    device_helper->scanServices(temp);
+
+}
 void MainWindow::on_Connecting_Button_clicked()
 {
     device_helper->startDeviceDiscovery();
-    QString button_name = "Connecting_Button";
-    emit Button_Clicked_SIG(button_name);
+   // QString button_name = "Connecting_Button";
+   // emit Button_Clicked_SIG(button_name);
 
-    my_Dialog = new Dialog(); // progress bar Dialog
+    my_Dialog = new M_connect(); // progress bar Dialog
+    connect(my_Dialog,SIGNAL(send_temp(QString,QList<QObject *>)),this,SLOT(receive_temp(QString,QList<QObject *>)));
     connect(my_Dialog,SIGNAL(Dialog_Close_SIG()),this,SLOT(Dialog_Close_SLOT()));
     connect(device_helper,SIGNAL(ProgressBar_update_SIG(QString)),my_Dialog,SLOT(ProgressBar_update_SLOT(QString)));
 
@@ -65,6 +71,9 @@ void MainWindow::Dialog_Close_SLOT(){
     ui->Disconnect_Button->setDisabled(0);
 
 }
+
+
+
 void MainWindow::on_Raw_Data_Button_clicked()
 {
 
@@ -199,7 +208,7 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox qBox;
     qBox.setWindowTitle("Information");
     qBox.setText("<font size = 12>MSensor Monitor </font>");
-    qBox.setInformativeText(QString::fromLocal8Bit(" ver : 1.0 (2020, 01,06)\n MSensor Product Test\n Copyright ¨Ï 2020 ,Mtome \n"));
+    qBox.setInformativeText(QString::fromLocal8Bit(" ver : 1.1 (2021 . 11 .02)\n MSensor Product Test\n Copyright ¨Ï 2020 ,Mtome \n"));
 
     qBox.exec();
 }

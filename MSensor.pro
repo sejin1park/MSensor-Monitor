@@ -25,8 +25,8 @@ SOURCES += \
     sourse/characteristicinfo.cpp \
     sourse/device.cpp \
     sourse/deviceinfo.cpp \
-    sourse/dialog.cpp \
     sourse/geometryengine.cpp \
+    sourse/m_connect.cpp \
     sourse/main.cpp \
     sourse/mainwindow.cpp \
     sourse/miwidget.cpp \
@@ -42,19 +42,21 @@ HEADERS += \
     header/characteristicinfo.h \
     header/device.h \
     header/deviceinfo.h \
-    header/dialog.h \
     header/geometryengine.h \
+    header/m_connect.h \
     header/mainwindow.h \
     header/miwidget.h \
     header/my_messagebox.h \
     header/objectgl.h \
     header/qcustomplot.h \
-    header/serviceinfo.h
+    header/serviceinfo.h \
+    sourse/m_connect.h
 
 FORMS += \
     sourse/dialog2.ui \
-    sourse/dialog.ui \
+    sourse/m_connect.ui \
     sourse/mainwindow.ui
+
 LIBS += -lOpengl32
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
